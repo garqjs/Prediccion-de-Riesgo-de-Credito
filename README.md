@@ -44,8 +44,8 @@ Con el umbral de **0.4474**, el modelo logra atrapar el **~73% del fraude** dete
 
 <img width="587" height="453" alt="image" src="https://github.com/user-attachments/assets/fbbb118b-5ea4-4c4f-9c31-a98a7ebb432b" />
 
-
 ---
+
 
 ## 🧪 Explicabilidad con SHAP
 El modelo basa sus decisiones en patrones lógicos y auditables:
