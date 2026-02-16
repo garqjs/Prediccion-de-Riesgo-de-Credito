@@ -19,7 +19,7 @@ El análisis reveló patrones de ataque específicos que el modelo aprendió a i
 - **La Ventana de Riesgo:** Se detectó una anomalía matutina (07:00 - 10:00 AM) donde la probabilidad de fraude se triplica.
 - **Comportamiento del Monto:** Los estafadores utilizan montos redondeados para "testear" tarjetas, lo que se convirtió en nuestra variable más predictiva: `is_round_amount`.
 
-<img width="1014" height="476" alt="image" src="https://github.com/user-attachments/assets/1d804580-edaf-4be1-b559-23c49cc65dac" />
+<img width="1000" height="466" alt="image" src="https://github.com/user-attachments/assets/1d804580-edaf-4be1-b559-23c49cc65dac" />
 
 
 ---
@@ -36,13 +36,13 @@ Para evitar el **Data Leakage**, se utilizó un **Time-based Split (80/20)**, as
 | **KS Stat** | **0.45** | Supera el estándar de la industria (0.40). |
 | **Punto de Corte** | **0.4474** | Umbral óptimo para maximizar el ahorro económico. |
 
-<img width="850" height="553" alt="image" src="https://github.com/user-attachments/assets/45e4f25b-0c11-49b0-a462-7961542129d4" />
+<img width="750" height="543" alt="image" src="https://github.com/user-attachments/assets/45e4f25b-0c11-49b0-a462-7961542129d4" />
 
 
 ### Matriz de Confusión (Impacto Operativo)
 Con el umbral de **0.4474**, el modelo logra atrapar el **~73% del fraude** detectado en el set de prueba.
 
-<img width="687" height="553" alt="image" src="https://github.com/user-attachments/assets/fbbb118b-5ea4-4c4f-9c31-a98a7ebb432b" />
+<img width="587" height="453" alt="image" src="https://github.com/user-attachments/assets/fbbb118b-5ea4-4c4f-9c31-a98a7ebb432b" />
 
 
 ---
@@ -53,7 +53,7 @@ El modelo basa sus decisiones en patrones lógicos y auditables:
 2. **`amt_to_mean_card1`**: Identifica desviaciones súbitas del gasto habitual del cliente.
 3. **`card1_cnt`**: La historia transaccional reduce el score de riesgo (Factor de Confianza).
 
-<img width="770" height="540" alt="image" src="https://github.com/user-attachments/assets/7371e223-0a38-44b5-9bef-ab64e5c94ff1" />
+<img width="670" height="440" alt="image" src="https://github.com/user-attachments/assets/7371e223-0a38-44b5-9bef-ab64e5c94ff1" />
 
 
 ---
