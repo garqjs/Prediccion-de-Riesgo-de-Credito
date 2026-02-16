@@ -1,78 +1,64 @@
-# Prediccion-de-Riesgo-de-Credito
+# 🛡️ Detección de Fraude en Transacciones Financieras | IEEE-CIS
 
-📝 Descripción del Proyecto
-Este proyecto desarrolla un sistema de clasificación binaria para predecir la probabilidad de que un solicitante de crédito incurra en impago (default). Utilizando el dataset de Home Credit, se integraron múltiples fuentes de datos para construir un perfil de riesgo integral, permitiendo una toma de decisiones basada en evidencia estadística.
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![XGBoost](https://img.shields.io/badge/Model-XGBoost-orange.svg)](https://xgboost.readthedocs.io/)
+[![DuckDB](https://img.shields.io/badge/Data_Engine-DuckDB-yellow.svg)](https://duckdb.org/)
 
-📈 Impacto de Negocio
-El modelo no solo busca precisión técnica, sino rentabilidad financiera. Se implementó un análisis de optimización de umbral (threshold tuning) para equilibrar el costo de los Falsos Negativos (créditos impagados) frente al costo de oportunidad de los Falsos Positivos (créditos rechazados a buenos clientes).
+## 📝 Resumen Ejecutivo
+Este repositorio presenta un sistema de detección de fraude transaccional de **grado bancario**. A diferencia de los modelos académicos, este pipeline implementa ingeniería de variables de **Velocity**, manejo de desbalanceo de clases mediante `scale_pos_weight` y validación de riesgo a través de la **Estadística KS** y el **Coeficiente Gini**.
 
-🛠️ Tech Stack & Metodología
-Lenguaje: Python.
-Librerías: Pandas, NumPy, Scikit-learn (Logistic Regression), Seaborn, Matplotlib.
-Ingeniería de Datos: Unión de tablas relacionales (application, bureau, previous_application), tratamiento de nulos y One-Hot Encoding.
-Optimización: Escalado de variables y auditoría de dimensionalidad.
+## 🚀 Key Highlights
+- **Ingeniería de Datos High-Performance:** Uso de **DuckDB** para procesar millones de registros y calcular métricas de frecuencia (Velocity) en milisegundos.
+- **Métricas de Riesgo:** Logro de un **KS de 0.45** (Modelo Muy Fuerte) y un **Gini de 0.59**.
+- **Explicabilidad:** Implementación de **SHAP** para eliminar el efecto "caja negra" y entender los disparadores del fraude.
 
-🧬 Pipeline del Proyecto
-1. Exploratory Data Analysis (EDA)
-Análisis de correlación con el Target para identificar los principales factores de riesgo (ej. Edad del cliente, historial de créditos previos). Implementación de mapas de calor y distribuciones de densidad.
+---
 
-2. Feature Engineering
-Creación de variables sintéticas como la relación deuda/ingreso y métricas agregadas del historial crediticio externo (Bureau).
+## 🔍 Análisis Criminalístico (EDA)
+El análisis reveló patrones de ataque específicos que el modelo aprendió a identificar:
+- **La Ventana de Riesgo:** Se detectó una anomalía matutina (07:00 - 10:00 AM) donde la probabilidad de fraude se triplica.
+- **Comportamiento del Monto:** Los estafadores utilizan montos redondeados para "testear" tarjetas, lo que se convirtió en nuestra variable más predictiva: `is_round_amount`.
 
-3. Entrenamiento y Evaluación
-Modelo: Regresión Logística con regularización.
-
-Métricas: Foco en AUC-ROC para medir la capacidad de discriminación del modelo.
-
-Análisis por Deciles: Segmentación de la población por probabilidad de riesgo para validar la consistencia del modelo.
-
-4. Simulación "What-If"
-Creación de un "Cliente Base" para realizar simulaciones de riesgo ante cambios en variables específicas, demostrando la sensibilidad y estabilidad del modelo.
-
-📊 Resultados Clave
-AUC-ROC Score:
-
-<img width="702" height="548" alt="image" src="https://github.com/user-attachments/assets/9a23b10e-7d64-4595-b2ce-b114fc3b8070" />
+<img width="1014" height="476" alt="image" src="https://github.com/user-attachments/assets/1d804580-edaf-4be1-b559-23c49cc65dac" />
 
 
-**Insights:**
+---
 
-🔍 Interpretación de Factores de Riesgo vs. Protección
+## 🧠 Modelado y Validación de Riesgo
 
-La gráfica muestra cómo cada variable empuja la probabilidad de impago hacia arriba (Riesgo) o hacia abajo (Protección). La magnitud (largo de la barra) indica qué tan fuerte es ese impacto.
+### Estrategia de Entrenamiento
+Para evitar el **Data Leakage**, se utilizó un **Time-based Split (80/20)**, asegurando que el modelo se entrene con el pasado para predecir el futuro, tal como sucede en un banco real.
 
-1. 🚩 Factores de Riesgo (Barras Rojas / Coeficientes Positivos)
-Estas variables aumentan la probabilidad de que el cliente caiga en default.
+### Performance del Modelo
+| Métrica | Resultado | Valor de Negocio |
+| :--- | :--- | :--- |
+| **Gini** | **0.59** | Alta capacidad de discriminación entre clientes. |
+| **KS Stat** | **0.45** | Supera el estándar de la industria (0.40). |
+| **Punto de Corte** | **0.4474** | Umbral óptimo para maximizar el ahorro económico. |
 
-FLAG_EMP_PHONE y DAYS_EMPLOYED: Son los predictores más fuertes. Indican que la situación laboral (o la forma en que se valida) es el mayor determinante de riesgo. Curiosamente, en este dataset, a menudo un valor alto en DAYS_EMPLOYED (si no está normalizado) puede actuar como un proxy de inestabilidad o falta de datos.
-
-AMT_CREDIT: A mayor monto de crédito solicitado, mayor es el riesgo percibido por el modelo. Esto es lógico: deudas más grandes son más difíciles de servir.
-
-2. 🛡️ Factores de Protección (Barras Verdes / Coeficientes Negativos)
-Estas variables disminuyen la probabilidad de impago; son indicadores de un cliente "sano".
-
-AMT_GOODS_PRICE: Es el factor de protección más fuerte. Indica que cuando el crédito está respaldado por un bien de alto valor, el cliente tiene más incentivos para pagar.
-
-EXT_SOURCE_1, 2 y 3: Estas son puntuaciones de crédito externas. El hecho de que tengan coeficientes negativos importantes confirma que estas fuentes externas son vitales para validar la solvencia del cliente.
-
-PREV_RATE_INTEREST_PRIVILEGED_mean: Sugiere que clientes que han tenido tasas preferenciales en el pasado tienden a ser mejores pagadores.
-
-<img width="1271" height="709" alt="image" src="https://github.com/user-attachments/assets/54a6fbc5-ab49-4c11-b6cd-cde900b694a8" />
+<img width="850" height="553" alt="image" src="https://github.com/user-attachments/assets/45e4f25b-0c11-49b0-a462-7961542129d4" />
 
 
+### Matriz de Confusión (Impacto Operativo)
+Con el umbral de **0.4474**, el modelo logra atrapar el **~73% del fraude** detectado en el set de prueba.
+
+<img width="687" height="553" alt="image" src="https://github.com/user-attachments/assets/fbbb118b-5ea4-4c4f-9c31-a98a7ebb432b" />
 
 
-***Definición del Escenario Económico***
+---
 
-Para medir el impacto en pesos, necesitamos asignar valores hipotéticos (pero realistas para el sector financiero) a cada decisión del modelo:
+## 🧪 Explicabilidad con SHAP
+El modelo basa sus decisiones en patrones lógicos y auditables:
+1. **`is_round_amount`**: Principal factor de riesgo.
+2. **`amt_to_mean_card1`**: Identifica desviaciones súbitas del gasto habitual del cliente.
+3. **`card1_cnt`**: La historia transaccional reduce el score de riesgo (Factor de Confianza).
 
-* Verdadero Positivo (VP): El modelo detecta a un cliente que no iba a pagar. Ahorro: Evitas perder el capital del préstamo (ej. $10,000).
-
-* Verdadero Negativo (VN): El modelo aprueba a quien sí paga. Ganancia: Los intereses generados (ej. $2,000).
-
-* Falso Positivo (FP): El modelo rechaza a alguien que sí iba a pagar. Costo de Oportunidad: Pierdes el interés que pudiste ganar (-$2,000).
-
-* Falso Negativo (FN): El modelo aprueba a alguien que no paga. Pérdida Directa: Pierdes el capital (-$10,000).
+<img width="770" height="540" alt="image" src="https://github.com/user-attachments/assets/7371e223-0a38-44b5-9bef-ab64e5c94ff1" />
 
 
+---
 
+## 🛠️ Estructura del Proyecto
+- `notebooks/Detección de Fraude(XBoost).ipynb`: Procesamiento masivo de datos; Entrenamiento, KS, Gini y SHAP; Matriz de Confusión
+
+---
