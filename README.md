@@ -51,7 +51,7 @@ El hallazgo más crítico es la **contaminación del Decil 2**. Mientras que en 
 ## 💡 Conclusiones Estratégicas
 1. **Inviabilidad del DTI Estándar:** El estándar bancario del 30-40% es inviable para los Deciles 0, 1 y 2 en León bajo este escenario inflacionario.
 2. **Recomendación:** Implementar un **"Piso de Excedente de Supervivencia"** de al menos $1,500 MXN fijos mensuales como requisito de aprobación, independientemente del porcentaje de DTI.
-3. **Alerta de Mercado:** Las promociones agresivas de la competencia para estos segmentos ignoran el costo de la canasta básica, lo que representa una oportunidad para CPM de captar socios mediante "Compra de Cartera" con plazos más flexibles.
+3. **Alerta de Mercado:** Las promociones agresivas de la competencia para estos segmentos ignoran el costo de la canasta básica, lo que representa una oportunidad de captar socios mediante "Compra de Cartera" con plazos más flexibles.
 
 ---
 **Tecnologías:** Python (Pandas, NumPy, Seaborn)  
